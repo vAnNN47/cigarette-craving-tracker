@@ -2,14 +2,21 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../hooks/useTheme";
+import { useResetData } from "../hooks/useResetData"; // Import the new hook
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "../components/UI/Navbar";
+import ResetConfirmationModal from "../components/Settings/ResetConfirmationModal";
 
 const Settings = () => {
   const { currentUser, userData, setupUserData, logout, hasUserSetupData } =
     useAuth();
   const { darkMode, toggleDarkMode } = useTheme();
+  const {
+    resetAllData,
+    loading: resetLoading,
+    error: resetError,
+  } = useResetData();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
@@ -20,6 +27,7 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showResetModal, setShowResetModal] = useState(false);
 
   // Load existing user data
   useEffect(() => {
@@ -54,6 +62,12 @@ const Settings = () => {
       }
     }
   }, [currentUser, userData, navigate]);
+
+  useEffect(() => {
+    if (resetError) {
+      setError(resetError);
+    }
+  }, [resetError]);
 
   const handleLogout = async () => {
     try {
@@ -111,6 +125,11 @@ const Settings = () => {
     }
   };
 
+  const handleConfirmReset = async () => {
+    await resetAllData();
+    setShowResetModal(false);
+  };
+
   // Custom time input component for more flexibility
   const CustomTimeInput = ({ date, onChange }) => {
     const hours = date ? date.getHours() : 0;
@@ -162,6 +181,14 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
       <Navbar />
+
+      {showResetModal && (
+        <ResetConfirmationModal
+          onClose={() => setShowResetModal(false)}
+          onConfirm={handleConfirmReset}
+        />
+      )}
+
       <div className="flex-grow p-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-6 dark:text-white">Settings</h1>
@@ -351,6 +378,28 @@ const Settings = () => {
                   />
                 </button>
               </div>
+            </div>
+
+            {/* Reset Data Section */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+              <h2 className="text-xl font-bold mb-4 text-red-600 dark:text-red-400">
+                Reset Data
+              </h2>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
+                This will permanently delete all your cravings data, progress
+                statistics, and settings. You'll need to set up your profile
+                again.
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setShowResetModal(true)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors"
+                disabled={resetLoading}
+              >
+                {resetLoading ? "Processing..." : "Reset All Data"}
+              </button>
             </div>
 
             {/* Action Buttons */}
