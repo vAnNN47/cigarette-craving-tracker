@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+}
+
+.dark .react-datepicker {
+  background-color: #1f2937;
+  color: white;
+  border-color: #374151;
+}
+
+.dark .react-datepicker__header {
+  background-color: #111827;
+  border-color: #374151;
+}
+
+.dark .react-datepicker__current-month,
+.dark .react-datepicker__day-name,
+.dark .react-datepicker-time__header {
+  color: white;
+}
+
+.dark .react-datepicker__day {
+  color: #e5e7eb;
+}
+
+.dark .react-datepicker__day:hover {
+  background-color: #374151;
+}
+
+.dark .react-datepicker__day--selected,
+.dark .react-datepicker__day--keyboard-selected {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.dark .react-datepicker__day--disabled {
+  color: #6b7280;
+}
+
+.dark .react-datepicker__navigation-icon::before {
+  border-color: #9ca3af;
+}
+
+.dark .react-datepicker__time-container {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.dark .react-datepicker__time-list-item {
+  color: #e5e7eb;
+}
+
+.dark .react-datepicker__time-list-item:hover {
+  background-color: #374151 !important;
+}
+
+.dark .react-datepicker__time-list-item--selected {
+  background-color: #3b82f6 !important;
+}
+
+/* Customize range input for dark mode */
+.dark input[type="range"] {
+  background-color: #4b5563;
+}
+
+.dark input[type="range"]::-webkit-slider-thumb {
+  background: #3b82f6;
+}
+
+.dark input[type="range"]::-moz-range-thumb {
+  background: #3b82f6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Transition effects for dark/light mode toggle */
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
