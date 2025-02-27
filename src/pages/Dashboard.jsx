@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useCravings } from "../hooks/useCravings";
 import { formatDate } from "../utils/dateUtils";
-import CravingModal from "../components/Dashboard/CravingModal";
 import QuitDateModal from "../components/Dashboard/QuitDateModal";
 import CravingStats from "../components/Dashboard/CravingStats";
 import TimeTracker from "../components/Dashboard/TimeTracker";
@@ -12,17 +12,11 @@ import SavedMoney from "../components/Dashboard/SavedMoney";
 import Navbar from "../components/UI/Navbar";
 
 const DashboardPage = () => {
-  const [showCravingModal, setShowCravingModal] = useState(false);
   const [showQuitDateModal, setShowQuitDateModal] = useState(false);
   const [graphType, setGraphType] = useState("count"); // 'count' or 'severity'
 
   const { currentUser, userData } = useAuth();
-  const { cravings, logCraving, loading, smokedToday, stats } = useCravings();
-
-  const handleLogCraving = async (severity, smoked) => {
-    await logCraving(severity, smoked);
-    setShowCravingModal(false);
-  };
+  const { cravings, loading, smokedToday, stats } = useCravings();
 
   const getCurrencySymbol = () => {
     return userData?.currency === "ILS" ? "₪" : "$";
@@ -45,13 +39,6 @@ const DashboardPage = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors duration-200">
       <Navbar />
 
-      {showCravingModal && (
-        <CravingModal
-          onClose={() => setShowCravingModal(false)}
-          onLogCraving={handleLogCraving}
-        />
-      )}
-
       {showQuitDateModal && (
         <QuitDateModal
           onClose={() => setShowQuitDateModal(false)}
@@ -59,21 +46,13 @@ const DashboardPage = () => {
         />
       )}
 
-      <div className="flex-grow p-4">
+      <div className="flex-grow p-4 pb-20 sm:pb-4">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
             <div className="flex flex-wrap items-center justify-between mb-4">
               <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
                 Welcome, {userData?.username || currentUser?.email}
               </h1>
-              <div className="flex space-x-3">
-                <button
-                  onClick={() => setShowCravingModal(true)}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
-                >
-                  Log a Craving
-                </button>
-              </div>
             </div>
 
             <div className="mb-4 flex flex-wrap justify-between items-center">
@@ -230,6 +209,29 @@ const DashboardPage = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Fixed Log Craving Button */}
+      <div className="fixed bottom-6 right-6">
+        <Link
+          to="/log-craving"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold h-14 w-14 rounded-full shadow-lg flex items-center justify-center focus:outline-none transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+        </Link>
       </div>
     </div>
   );
